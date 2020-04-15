@@ -63,3 +63,7 @@ typings/
 # Flex related ignore
 appConfig.js
 build/
+package-lock.json
+.idea
+.DS_Store
+.local*
