@@ -54,9 +54,10 @@ exports.handler = JWEValidator(async function(context, event, callback) {
     // Set the channelSid and ProxySessionSID to a dummy value. This keeps the session alive
     let updatedAttributes = {
       ...JSON.parse(originalTask.attributes),
-      channelSid: "CH00000000000000000000000000000000",
+      channelSid: "CH00000000000000000000000000000",
       proxySessionSID: "KC00000000000000000000000000000000"
     };
+
     await client.taskrouter
       .workspaces(context.TWILIO_WORKSPACE_SID)
       .tasks(originalTaskSid)
@@ -65,11 +66,11 @@ exports.handler = JWEValidator(async function(context, event, callback) {
       });
 
     // Close the original Task
+
     await client.taskrouter
       .workspaces(context.TWILIO_WORKSPACE_SID)
       .tasks(originalTaskSid)
       .update({ assignmentStatus: "completed", reason: "task transferred" });
-
 
     response.setBody({
         taskSid: newTask.sid

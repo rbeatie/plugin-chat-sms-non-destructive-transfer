@@ -15,6 +15,7 @@ export default class ChatTransferPlugin extends FlexPlugin {
    *
    * @param flex { typeof import('@twilio/flex-ui') }
    * @param manager { import('@twilio/flex-ui').Manager }
+   *
    */
   init(flex, manager) {
     flex.TaskCanvasHeader.Content.add(
@@ -24,7 +25,7 @@ export default class ChatTransferPlugin extends FlexPlugin {
     );
 
 
-    flex.Actions.replaceAction("TransferTask", (payload, original) => transferOverride(payload, original))
+    flex.Actions.replaceAction("TransferTask", (payload, original) => transferOverride(payload, original));
 
     function transferOverride (payload, original) {
       if (!flex.TaskHelper.isChatBasedTask(payload.task)) {
@@ -33,7 +34,7 @@ export default class ChatTransferPlugin extends FlexPlugin {
 
       return new Promise((resolve, reject) => {
         removeDefaultChatChannelOrchestrations();
-
+        if (eve)
         fetch(`https://${manager.serviceConfiguration.runtime_domain}/transfer-chat`, {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -45,14 +46,14 @@ export default class ChatTransferPlugin extends FlexPlugin {
           console.log('Task Successfully Transfered');
           setTimeout(() => {
             restoreDefaultChatChannelOrchestrations();
-          }, 2000)
+          }, 2000);
           resolve();
         })
         .catch(error => {
           console.log(error);
           setTimeout(() => {
             restoreDefaultChatChannelOrchestrations();
-          }, 2000)
+          }, 2000);
           reject();
         });
       })
